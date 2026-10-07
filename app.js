@@ -2,6 +2,19 @@ const express = require("express");
 
 const app = express();
 
+// Security headers
+app.disable("x-powered-by");
+
+app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; style-src 'self' 'unsafe-inline'"
+    );
+    next();
+});
+
 app.get("/", (req, res) => {
     res.send(`
         <h1>DevOps Security Lab</h1>
@@ -10,12 +23,20 @@ app.get("/", (req, res) => {
     `);
 });
 
-// INTENTIONALLY VULNERABLE DEMO ENDPOINT
+// Secure search endpoint
 app.get("/search", (req, res) => {
-    const query = req.query.q || "";
+    const query = String(req.query.q || "");
+
+    const safeQuery = query
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
     res.send(`
         <h2>Search Results</h2>
-        <p>You searched for: ${query}</p>
+        <p>You searched for: ${safeQuery}</p>
     `);
 });
 
