@@ -23,17 +23,16 @@ app.get("/", (req, res) => {
     `);
 });
 
-// Secure search endpoint
 app.get("/search", (req, res) => {
     const query = String(req.query.q || "");
 
-    // Escape HTML characters to prevent reflected XSS
+    // Prevent reflected XSS
     const safeQuery = query
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
     res.send(`
         <h2>Search Results</h2>
