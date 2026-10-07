@@ -29,11 +29,11 @@ app.get("/search", (req, res) => {
 
     // Escape HTML characters to prevent reflected XSS
     const safeQuery = query
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
     res.send(`
         <h2>Search Results</h2>
