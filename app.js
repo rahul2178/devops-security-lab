@@ -23,10 +23,10 @@ app.get("/", (req, res) => {
     `);
 });
 
+// Secure search endpoint
 app.get("/search", (req, res) => {
     const query = String(req.query.q || "");
 
-    // Prevent reflected XSS
     const safeQuery = query
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
